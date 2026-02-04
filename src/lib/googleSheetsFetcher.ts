@@ -15,8 +15,8 @@ export interface SheetSource {
 
 export const SHEET_SOURCES: SheetSource[] = [
     {
-        packageId: 'Bemonc6',
-        packageName: 'Bemonc6',
+        packageId: 'Bemonc8',
+        packageName: 'BeMONC Package 8 Prefab',
         publishedXlsxUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT8ioVcUUv9VXS48-z6-gWirSNDjDZFx9CW0lhlJqF4W7XFBaRGZXrvtmh9OCnLtQOVjiJ5t9dooMXV/pub?output=xlsx',
     },
 ];
