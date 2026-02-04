@@ -1,0 +1,228 @@
+{
+  "fileName": "Master of Flood Package Consolidated.xlsx",
+  "sheets": [
+    {
+      "name": "Data_Entry",
+      "totalRows": 1786,
+      "totalColumns": 20,
+      "headers": [
+        "package_id",
+        "package_name",
+        "district",
+        "site_id",
+        "site_name",
+        "discipline",
+        "task_name",
+        "planned_start",
+        "planned_finish",
+        "planned_duration_days",
+        "actual_start",
+        "actual_finish",
+        "progress_pct",
+        "Variance",
+        "delay_flag_calc",
+        "last_updated",
+        "remarks",
+        "photo_folder_url",
+        "cover_photo_share_url",
+        "cover_photo_direct_url"
+      ],
+      "sampleData": [
+        [
+          "FP1",
+          "Flood Package-1",
+          "Swat",
+          "FP1-SW-001",
+          "BHU Islampura",
+          "General",
+          "Mobilization",
+          "11/01/2026",
+          "12/01/2026",
+          "2",
+          "11/01/2026",
+          "14/01/2026",
+          "100",
+          "2",
+          "On Track",
+          "20/01/2026",
+          "",
+          "https://drive.google.com/drive/folders/1VJvF8ELVGOAhnP_GLEoHnsNFTYb1_n3U?usp=sharing",
+          "https://drive.google.com/file/d/1k12mPgyKia9CnxrMxuPndH7kb4AM9NBM/view?usp=sharing",
+          "https://drive.google.com/uc?export=view&id=1k12mPgyKia9CnxrMxuPndH7kb4AM9NBM"
+        ],
+        [
+          "FP1",
+          "Flood Package-1",
+          "Swat",
+          "FP1-SW-001",
+          "BHU Islampura",
+          "General",
+          "Dismantling Work",
+          "13/01/2026",
+          "01/02/2026",
+          "20",
+          "",
+          "",
+          "",
+          "0",
+          "DELAYED (Not Started)",
+          "20/01/2026",
+          "",
+          "https://drive.google.com/drive/folders/1VJvF8ELVGOAhnP_GLEoHnsNFTYb1_n3U?usp=sharing",
+          "",
+          ""
+        ],
+        [
+          "FP1",
+          "Flood Package-1",
+          "Swat",
+          "FP1-SW-001",
+          "BHU Islampura",
+          "Civil",
+          "Clearing & Grubbing",
+          "23/02/2026",
+          "05/03/2026",
+          "11",
+          "",
+          "",
+          "",
+          "0",
+          "On Track",
+          "20/01/2026",
+          "",
+          "https://drive.google.com/drive/folders/1VJvF8ELVGOAhnP_GLEoHnsNFTYb1_n3U?usp=sharing",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "Lists",
+      "totalRows": 1000,
+      "totalColumns": 7,
+      "headers": [
+        "district_list",
+        "",
+        "discipline_list",
+        "",
+        "package_ids",
+        "",
+        "package_names"
+      ],
+      "sampleData": [
+        [
+          "Peshawar",
+          "",
+          "Civil",
+          "",
+          "FP1",
+          "",
+          "Flood Package-1"
+        ],
+        [
+          "Swat",
+          "",
+          "Electrical",
+          "",
+          "FP2",
+          "",
+          "Flood Package-2"
+        ],
+        [
+          "Shangla",
+          "",
+          "Plumbing",
+          "",
+          "FP3",
+          "",
+          "Flood Package-3"
+        ]
+      ]
+    },
+    {
+      "name": "Sites",
+      "totalRows": 1000,
+      "totalColumns": 7,
+      "headers": [
+        "package_id",
+        "district",
+        "site_id",
+        "site_name",
+        "photo_folder_url",
+        "cover_photo_share_url",
+        "cover_photo_direct_url"
+      ],
+      "sampleData": [
+        [
+          "FP1",
+          "Swat",
+          "FP1-SW-001",
+          "BHU Islampura",
+          "",
+          "",
+          ""
+        ],
+        [
+          "FP1",
+          "Swat",
+          "FP1-SW-002",
+          "BHU Mashkomai",
+          "",
+          "",
+          ""
+        ],
+        [
+          "FP1",
+          "Swat",
+          "FP1-SW-003",
+          "BHU Nawa Kaly",
+          "",
+          "",
+          ""
+        ]
+      ]
+    },
+    {
+      "name": "Tasks",
+      "totalRows": 1000,
+      "totalColumns": 2,
+      "headers": [
+        "discipline",
+        "task_name"
+      ],
+      "sampleData": [
+        [
+          "discipline",
+          "task_name"
+        ],
+        [
+          "Civil",
+          "Clearing & Grubbing"
+        ],
+        [
+          "Civil",
+          "Dismantling Work"
+        ]
+      ]
+    },
+    {
+      "name": "README",
+      "totalRows": 1000,
+      "totalColumns": 1,
+      "headers": [
+        "Use Data_Entry for updates. Keep headers unchanged.\nSites holds your site master (site_id/site_name + photo links).\nDashboard build: consolidate package files into one master sheet via IMPORTRANGE.\n"
+      ],
+      "sampleData": [
+        [
+          ""
+        ],
+        [
+          ""
+        ],
+        [
+          ""
+        ]
+      ]
+    }
+  ]
+}
