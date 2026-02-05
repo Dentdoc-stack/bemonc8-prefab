@@ -3,17 +3,18 @@
  * Fetches Google Sheets, processes tasks with status computation, deduplicates
  */
 
-import { fetchAllSheets, mapRowToTask, fetchAllComplianceData } from './google-sheets-client';
+import { fetchAllSheets, mapRowToTask, fetchAllComplianceData, fetchAllIPCData } from './google-sheets-client';
 import { computeTaskStatus } from '../dataParser';
 import { groupTasksBySite, computeKPIs } from '../dataProcessor';
 import { SHEET_SOURCES } from './config';
-import type { Task, TaskWithStatus, SiteAggregate, DashboardKPIs, PackageComplianceMap } from '@/types';
+import type { Task, TaskWithStatus, SiteAggregate, DashboardKPIs, PackageComplianceMap, IPCData } from '@/types';
 
 export interface IngestedData {
     tasks: TaskWithStatus[];
     sites: SiteAggregate[];
     kpis: DashboardKPIs;
     packageCompliance: PackageComplianceMap;
+    ipcData: IPCData;
     lastRefresh: Date;
     source: 'google-sheets';
     _metadata: {
@@ -32,9 +33,10 @@ export async function ingestAllSheets(): Promise<IngestedData> {
     const startTime = Date.now();
 
     // Step 1: Fetch all sheets and compliance data in parallel
-    const [sheetsData, complianceData] = await Promise.all([
+    const [sheetsData, complianceData, ipcData] = await Promise.all([
         fetchAllSheets(),
         fetchAllComplianceData(),
+        fetchAllIPCData(),
     ]);
 
     // Convert compliance Map to Record
@@ -98,6 +100,7 @@ export async function ingestAllSheets(): Promise<IngestedData> {
         sites,
         kpis,
         packageCompliance,
+        ipcData,
         lastRefresh: new Date(),
         source: 'google-sheets',
         _metadata: {

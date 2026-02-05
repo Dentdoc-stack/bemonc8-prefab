@@ -70,9 +70,10 @@ export default function SiteTable({ sites }: SiteTableProps) {
                 ].filter(Boolean).length;
 
                 return (
-                  <tbody key={site.siteKey}>
+                  <>
                     {/* Compact Site Row */}
                     <TableRow
+                      key={`${site.siteKey}-main`}
                       className="hover:bg-muted/50 cursor-pointer"
                       onClick={() => toggleSite(site.siteKey)}
                     >
@@ -354,7 +355,7 @@ export default function SiteTable({ sites }: SiteTableProps) {
                         </TableCell>
                       </TableRow>
                     )}
-                  </tbody>
+                  </>
                 );
               })}
             </TableBody>

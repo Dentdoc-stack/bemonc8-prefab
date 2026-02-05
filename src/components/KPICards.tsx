@@ -12,7 +12,8 @@ import {
   TrendingUp,
   Info,
   Target,
-  ShieldCheck
+  ShieldCheck,
+  Truck
 } from 'lucide-react';
 
 import type { LucideIcon } from 'lucide-react';
@@ -24,7 +25,7 @@ interface KPICardsProps {
 type CardItem = {
   label: string;
   value: string | number;
-  icon: LucideIcon;
+  icon?: LucideIcon;
   tone: string;
   tooltip?: string;
 };
@@ -52,6 +53,13 @@ export default function KPICards({ kpis }: KPICardsProps) {
       icon: ShieldCheck,
       tone: 'success',
       tooltip: 'Sites where 100% of tasks are completed.',
+    },
+    {
+      label: 'Mobilization Advance Taken',
+      value: 'Yes',
+      icon: Truck,
+      tone: 'light-red',
+      tooltip: 'Mobilization advance has been taken for all packages.',
     },
   ];
 
@@ -98,6 +106,7 @@ export default function KPICards({ kpis }: KPICardsProps) {
     destructive: 'bg-destructive/20 text-destructive',
     'destructive-strong': 'bg-destructive/15 text-destructive',
     muted: 'bg-muted text-muted-foreground',
+    'light-red': 'bg-red-100 text-red-700',
   };
 
   const renderRow = (cards: CardItem[]) => (
@@ -109,9 +118,11 @@ export default function KPICards({ kpis }: KPICardsProps) {
           <Card key={card.label} className="hover:shadow-md transition-shadow">
             <CardContent className="p-5">
               <div className="flex items-start justify-between mb-3">
-                <div className={`p-2 rounded-lg ${tone}`}>
-                  <Icon className="w-5 h-5" />
-                </div>
+                {Icon && (
+                  <div className={`p-2 rounded-lg ${tone}`}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                )}
                 {card.tooltip && (
                   <Info
                     className="w-4 h-4 text-muted-foreground"

@@ -3,7 +3,7 @@
  */
 
 import { SHEET_SOURCES } from './config';
-import type { PackageCompliance, ComplianceStatus, Task } from '@/types';
+import type { PackageCompliance, ComplianceStatus, Task, IPCData } from '@/types';
 import { parseDMY } from '../dataParser';
 
 interface RawComplianceData {
@@ -191,6 +191,124 @@ export async function fetchAllComplianceData(): Promise<Map<string, PackageCompl
     });
 
     return complianceMap;
+}
+
+/**
+ * Type definitions for safe cell access
+ */
+interface SheetCell {
+    v?: string | number | boolean | null;
+    t?: string;
+    [key: string]: unknown;
+}
+
+interface WorkSheet {
+    [cellKey: string]: SheetCell | undefined;
+}
+
+/**
+ * Parse IPC (Interim Payment Certificate) data from XLSX worksheet
+ * Reads row 2, columns Y-AD (0-indexed columns 24-29)
+ */
+function parseIPCData(
+    sheet: WorkSheet & Record<string, unknown>,
+    xlsxUtils: any
+): IPCData {
+    console.log('[IPCData] Starting to parse IPC data...');
+    console.log('[IPCData] Sheet !ref:', sheet['!ref']);
+    console.log('[IPCData] All sheet keys:', Object.keys(sheet).filter(k => !k.startsWith('!')).slice(0, 20));
+
+    const records = [];
+    const statusMap: Record<string, 'not submitted' | 'submitted' | 'in process' | 'released'> = {
+        'not submitted': 'not submitted',
+        'submitted': 'submitted',
+        'in process': 'in process',
+        'released': 'released',
+    };
+
+    // Read columns 24-29 (Y-AD) from row 2 (index 1)
+    for (let col = 24; col <= 29; col++) {
+        const cellRef = xlsxUtils.encode_cell({ r: 1, c: col });
+        const cellValue = sheet[cellRef];
+
+        console.log(
+            `[IPCData] Reading Row 2, Column ${col} (${cellRef}):`,
+            cellValue ? (typeof cellValue === 'object' && 'v' in cellValue ? cellValue.v : cellValue) : 'undefined'
+        );
+
+        let statusRaw: string | null = null;
+
+        if (cellValue && typeof cellValue === 'object' && 'v' in cellValue && cellValue.v) {
+            statusRaw = String(cellValue.v).toLowerCase().trim();
+        }
+
+        const ipcNumber = `IPC ${col - 23}`; // IPC 1-6
+        const mappedStatus = statusRaw && statusRaw in statusMap ? statusMap[statusRaw] : null;
+
+        console.log(
+            `[IPCData]   → IPC Number: ${ipcNumber}, Raw: "${statusRaw}", Mapped: "${mappedStatus}"`
+        );
+
+        records.push({
+            ipcNumber,
+            status: mappedStatus,
+        });
+    }
+
+    console.log('[IPCData] Final parsed records:', records);
+    console.log('[IPCData] Non-null records:', records.filter(r => r.status !== null).length);
+
+    return { records };
+}
+
+/**
+ * Fetch IPC data from published XLSX
+ * Extracts interim payment certificate statuses
+ */
+export async function fetchAllIPCData(): Promise<IPCData> {
+    try {
+        console.log('[IPCData] Starting IPC data fetch...');
+
+        if (SHEET_SOURCES.length === 0) {
+            console.warn('[IPCData] No sheet sources configured');
+            return { records: [] };
+        }
+
+        const source = SHEET_SOURCES[0];
+        console.log(`[IPCData] Fetching from ${source.packageId}: ${source.publishedXlsxUrl}`);
+
+        const response = await fetch(source.publishedXlsxUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch XLSX: ${response.statusText}`);
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        const data = new Uint8Array(arrayBuffer);
+
+        // Import XLSX dynamically
+        const XLSX = await import('xlsx');
+        console.log('[IPCData] XLSX library loaded');
+
+        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+        console.log('[IPCData] Workbook loaded, sheets:', workbook.SheetNames);
+
+        // Find Data_Entry sheet
+        let sheetName = 'Data_Entry';
+        if (!workbook.SheetNames.includes(sheetName)) {
+            sheetName = workbook.SheetNames[0];
+        }
+
+        const worksheet = workbook.Sheets[sheetName] as WorkSheet & Record<string, unknown>;
+        console.log(`[IPCData] Using sheet: ${sheetName}`);
+
+        const ipcData = parseIPCData(worksheet, XLSX.utils);
+        console.log('[IPCData] ✅ IPC data parsed successfully:', ipcData);
+
+        return ipcData;
+    } catch (error) {
+        console.error('[IPCData] ❌ Error fetching IPC data:', error);
+        return { records: [] };
+    }
 }
 
 /**

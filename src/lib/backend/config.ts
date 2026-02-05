@@ -22,7 +22,7 @@ export const SHEET_SOURCES: SheetSource[] = [
 
 export const CONFIG = {
     tabName: 'Data_Entry',
-    range: 'A:U',
+    range: 'A:AD',
     cacheIntervalMs: 30 * 60 * 1000, // 30 minutes
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY || '', // Optional for public sheets
 };
